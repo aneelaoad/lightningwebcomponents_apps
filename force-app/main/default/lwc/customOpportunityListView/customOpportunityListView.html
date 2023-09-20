@@ -1,0 +1,106 @@
+<template>
+	<lightning-card icon-name="standard:account" variant="base">
+    <div> 
+      	<div class="slds-align_absolute-center" >
+				Opportunities
+
+					<lightning-combobox name={listValue} value={listValue} placeholder={listValue} options={listOptions}
+						onchange={handleListChange}></lightning-combobox>
+				</div>
+    </div>
+		<header  c-opportunitylistview_opportunitylistview style=" display: flex; justify-content: space-between;">
+      <div style="flex:1">
+        <h1>Inspection</h1>
+        <h1 style="margin: 0 10px">Chart</h1>
+      </div>
+			<div class="left " style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 10px ;flex:1">
+          <div class="slds-align_absolute-center">
+					<label for="">Close Date</label>
+
+					<lightning-combobox name="progress" value={selectedCloseDate} placeholder={selectedCloseDate}
+						options={options} onchange={handleChange}></lightning-combobox>
+				</div>
+
+        <div class="slds-align_absolute-center">
+					<label for="">Owner</label>
+
+					<lightning-combobox name={selectedOwner} value={selectedOwner} placeholder={selectedOwner}
+						options={ownerOptions} onchange={handleOwnerChange}></lightning-combobox>
+				</div>
+
+
+     <div class="">
+					<label for="">Changes Since</label>
+
+					<lightning-combobox name={seletedChangeSince} value={seletedChangeSince} placeholder={seletedChangeSince}
+						options={changeSinceOptions} onchange={handleChangeSince}></lightning-combobox>
+				</div>
+
+			</div>
+		</header>
+		<div class="list-summary slds-p-around_medium" style="background-color: blue; color:white">
+			<div class="slds-grid">
+				<div class="slds-col">
+					<span>Open Pipeline</span>
+					<template if:true={openPipelineTotalAmount}>
+						<h1> {openPipelineTotalAmount}</h1>
+					</template>
+
+				</div>
+				<div class="slds-col">
+					<span>New</span>
+					<template if:true={newTotalAmount}>
+						<h1> {newTotalAmount}</h1>
+					</template>
+
+				</div>
+				<div class="slds-col">
+					<span>Won</span>
+					<template if:true={wonTotalAmount}>
+						<h1> {wonTotalAmount}</h1>
+						<!-- <h1> {totalwonAmountInKilo}</h1> -->
+					</template>
+
+				</div>
+				<!-- <div class="slds-col">
+        <span>Increased</span>
+        <h1> {increasedTotalAmount}</h1>
+        </div>
+        <div class="slds-col">
+        <span>Moved In</span>
+        <h1> {movedInTotalAmount}</h1>
+        </div>
+        <div class="slds-col">
+         <span>Moved Out</span>
+        <h1> {movedOutTotalAmount}</h1>
+        </div>
+        <div class="slds-col">
+          <span>Decreased</span>
+        <h1> {decreasedTotalAmount}</h1>
+        </div> -->
+				<div class="slds-col">
+					<span>Lost</span>
+					<template if:true={lostTotalAmount}>
+						<h1> {lostTotalAmount}</h1>
+					</template>
+				</div>
+				<div class="slds-col">
+					<span>Overdue</span>
+					<template if:true={overDueTotalAmount}>
+						<h1> {overDueTotalAmount}</h1>
+					</template>
+
+				</div>
+
+			</div>
+		</div>
+
+		<template if:true={opportunityList}>
+			<div style="height: 300px;">
+				<lightning-datatable key-field="id" data={opportunityList} columns={columns}>
+				</lightning-datatable>
+			</div>
+		</template>
+
+	</lightning-card>
+</template>
