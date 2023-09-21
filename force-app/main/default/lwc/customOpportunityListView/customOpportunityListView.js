@@ -1,8 +1,6 @@
 import { LightningElement, wire, api } from 'lwc';
-// import getOpportunityListWithDate from '@salesforce/apex/OpportunityController.getOpportunityListWithDate'
-// import getOpportunityListWithList from '@salesforce/apex/OpportunityController.getOpportunityListWithList'
 import getOpportunityList from '@salesforce/apex/OpportunityListController.opportunitiesList';
-// import ACC from '@salesforce/schema/Opportunity.Account'
+
 import ACC_NAME from '@salesforce/schema/Opportunity.Account.Name'
 
 
@@ -75,49 +73,36 @@ export default class CustomOpportunityListView extends LightningElement {
     
             this.opportunityList = data.oppoList;
             console.log('----->>>' + JSON.stringify(this.opportunityList))
-            this.wonTotalAmount = data.wonOpportunitiesTotal;
-            this.lostTotalAmount = data.lostOpportunitiesTotal;
-            this.overDueTotalAmount = data.overOpportunitiesTotal;
-            this.openPipelineTotalAmount = data.openOpportunitiesTotal;
-            this.newTotalAmount = data.newOpportunitiesTotal;
 
-            // this.opportunityList.forEach(opportunity => {
-            //     if (opportunity.StageName == 'Closed Won') {
-
-            //         if (opportunity.Amount != null)
-            //             this.wonTotalAmount = this.wonTotalAmount + opportunity.Amount;
-
-            // //     }
-                
-                
-            //  let total = this.wonTotalAmount
-            //         total.toString().replace(/[^0-9.]/g, '');
-            //         if (total < 1000) {
-            //             return total;
-            //         }
-            //         let si = [
-            //             { v: 1E3, s: "K" },
-            //             { v: 1E6, s: "M" },
-            //             { v: 1E9, s: "B" },
-            //             { v: 1E12, s: "T" },
-            //             { v: 1E15, s: "P" },
-            //             { v: 1E18, s: "E" }
-            //         ];
-            //         let index;
-            //         for (index = si.length - 1; index > 0; index--) {
-            //             if (total >= si[index].v) {
-            //                 break;
-            //             }
-            //         }
-            //         total = (total / si[index].v).toFixed(2).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + si[index].s;
-            //         console.log('TOTAL : '+this.wonTotalAmount);
-            //         console.log('TOTAL in K: '+total);
-            //         this.totalwonAmountInKilo = total;
-            // });
+            
+            this.wonTotalAmount = this.convertToInternationalCurrencySystem(data.wonOpportunitiesTotal);
+            this.convertToInternationalCurrencySystem
+            this.lostTotalAmount = this.convertToInternationalCurrencySystem(data.lostOpportunitiesTotal);
+            this.overDueTotalAmount = this.convertToInternationalCurrencySystem(data.overOpportunitiesTotal);
+            this.openPipelineTotalAmount = this.convertToInternationalCurrencySystem(data.openOpportunitiesTotal);
+            this.newTotalAmount =this.convertToInternationalCurrencySystem(data.newOpportunitiesTotal);
+            
         }
     }
 
-  
+    convertToInternationalCurrencySystem (labelValue) {
+
+        // Nine Zeroes for Billions
+        return Math.abs(Number(labelValue)) >= 1.0e+9
+    
+        ? (Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2) + "B"
+        // Six Zeroes for Millions 
+        : Math.abs(Number(labelValue)) >= 1.0e+6
+    
+        ? (Math.abs(Number(labelValue)) / 1.0e+6).toFixed(2) + "M"
+        // Three Zeroes for Thousands
+        : Math.abs(Number(labelValue)) >= 1.0e+3
+    
+        ? (Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2) + "K"
+    
+        : Math.abs(Number(labelValue));
+    
+    }
 
     callListWithDate() {
     
@@ -132,57 +117,5 @@ export default class CustomOpportunityListView extends LightningElement {
     }
 
 
-        // handleListChange(event) { 
-        //     this.listFilter = event.detail.value; 
-        //     console.log("Selected filter: "+ this.listFilter); 
-        //     this.callList(this.listFilter);
-
-
-        // }
-
-
-    //  callList(listFilter){
-    //         getOpportunityList({ dateFilter: this.dateFilter, showAll: listFilter }).then((data) => {
-    //             this.opportunityList = data.oppoList;
-    //             this.wonTotalAmount  = data.wonOpportunitiesTotal; 
-    //             console.log('-->' +this.opportunityList);
-    //             console.log(' True or false' +listFilter);
-    //         }).catch((error)=>{
-    //             console.error(error)
-    //         })
-    //     }
-
-      //   @wire(getOpportunityListWithList, {listFilter :'$listFilter'})
-        //     oppoList({data, err}){
-        //         if(data){
-        //         this.opportunityList = data
-        //         console.log('----->>>' +JSON.stringify(this.opportunityList))
-
-        //         //   this.opportunityList.forEach(opportunity => {
-        //         //         if(opportunity.StageName == 'Closed Won'){
-        //         //             console.log('OUTPUT : '+opportunity.Name);
-        //         //             console.log('OUTPUT : '+opportunity.StageName);
-        //         //         }
-
-
-        //         //     });
-        //         }
-
-          // @wire(getOpportunityListWithDate, {dateFilter :'$dateFilter'})
-    // oppoList({data, err}){
-    //     if(data){
-    //     this.opportunityList = data
-    //     console.log('----->>>' +JSON.stringify(this.opportunityList))
-
-    //     this.opportunityList.forEach(opportunity => {
-    //             if(opportunity.StageName == 'Closed Won'){
-    //                 console.log('OUTPUT : '+opportunity.Name);
-    //                 console.log('OUTPUT : '+opportunity.StageName);
-    //             }
-
-
-    //         });
-    //     }
-
-    // }
+       
 }
